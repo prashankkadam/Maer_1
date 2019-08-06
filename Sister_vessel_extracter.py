@@ -17,25 +17,33 @@ from pathlib import PureWindowsPath
 def SisterVesselExtract(df, model_name):
 
     flag = ''
-    df_final = pd.DataFrame(columns = ['Model name', 'Vessel name', 'IMO number', 'Sister vessel'])
+    df_final = pd.DataFrame(columns = ['Model name', 'Vessel name', 'IMO number', 'Sister vessel', 'Sister vessel IMO'])
+    df_inter_1 = pd.DataFrame(columns = ['Model name', 'Vessel name', 'IMO number', 'Sister vessel'])
+    df_inter_2 = pd.DataFrame(columns = ['Sister vessel IMO'])
     df_sister = pd.DataFrame(columns = ['Model name', 'Vessel name', 'IMO number', 'Sister vessel'])
+    df_sister_imo = pd.DataFrame(columns = ['Sister vessel IMO'])
 
     for index, row in df.iterrows():
     
         if 'IMO number' in str(row['Unnamed: 0']): 
             imo_number = row['Value']
+            for x in row[2:]:
+                df_sister_imo.loc[0] = ({'Sister vessel IMO':str(x)})
+                df_inter_2 = pd.concat([df_inter_2, df_sister_imo])
             continue
        
         if 'Vessel name' in str(row['Unnamed: 0']):
             vessel_name = row['Value'] 
             for x in row[2:]:                                          
                    df_sister.loc[0] = ({'Model name':model_name, 'Vessel name':vessel_name, 'IMO number':imo_number, 'Sister vessel':x})
-                   df_final = pd.concat([df_final, df_sister])
+                   df_inter_1 = pd.concat([df_inter_1, df_sister])
             flag = 'X'
                 
         if flag == 'X':
             break                
-        
+    
+    df_final = pd.concat([df_inter_1, df_inter_2], axis=1, sort=False)
+    
     return df_final               
 
 # Finding the path to the different excel sheets:
@@ -80,4 +88,4 @@ for f in paths:
     
 # After all the data has been extracted into a single dataframe we export the 
 # dataframe to an excel sheet        
-df_final_data.to_excel('M:\Fuel Opt\VesselPerformance\Vessel Information\Vessel Data\Static Data\Prashank\Sister_vessel\\final.xlsx')    
+df_final_data.to_excel('M:\Fuel Opt\VesselPerformance\Vessel Information\Vessel Data\Static Data\Prashank\Sister_vessel\\final.xlsx')
