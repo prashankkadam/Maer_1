@@ -10,3 +10,5 @@ Final file for sister vessel extractor version 1.0 uploaded (29/07/2019)
 Database test git template
 
 Sister vessel extracter ver - 1.1 (Sister IMO logic)
+
+Static data to PDF generator (06/09/2019)
