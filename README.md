@@ -14,3 +14,5 @@ Sister vessel extracter ver - 1.1 (Sister IMO logic)
 Static data to PDF generator (06/09/2019)
 
 Static data to pdf converter - Updating the comments (29/09/2019) 
+
+Sister vessel extracter comment update - (03/10/2019)
