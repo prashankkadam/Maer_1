@@ -18,3 +18,5 @@ Static data to pdf converter - Updating the comments (29/09/2019)
 Sister vessel extracter comment update - (03/10/2019)
 
 Script for plotting vessel position in Google maps - (06/11/2019)
+
+Plot multiple vessel voyage on google maps - (07/11/2019)
