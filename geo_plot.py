@@ -1,23 +1,68 @@
-# import gmplot package 
+# -*- coding:/ utf-8 -*-
+"""
+This piece of software is bound by The MIT License (MIT)
+Copyright (c) 2019 Prashank Kadam
+Code written by : Prashank Kadam
+User name - ADM-PKA187
+Email ID : prashank.kadam@maersktankers.com
+Created on - Thu Nov 7 2019
+version : 1.0
+"""
+
+# We use gmplot, google's open source library to plot scatter plots on google maps
+# installing gmplot - $ pip install gmplot
+
+# Importing the required libraries:
 import gmplot
 import pandas as pd
 
+# Importing the data from excel sheet
+# This data contains the latitude, logitude and the vessel name of the vessel whose
+#  voyage needs to be traced
 df = pd.read_excel('Lat_long.xlsx')
 
-latitude_list = df['Latitude'].to_list()
-longitude_list = df['Longitude'].to_list()
+# Selecting the list of unique vessels from the dataframe
+vessels = df['Vessel_name'].unique()
 
+# Plotting the center of the intitial perspective from which our map should open
+#  in the browser along with the required zoom
 gmap3 = gmplot.GoogleMapPlotter(df['Latitude'].mean(),
                                 df['Longitude'].mean(), 5)
 
-# scatter method of map object  
-# scatter points on the google map 
-gmap3.scatter(latitude_list, longitude_list, '# FF0000',
-              size=40, marker=True)
+# Looping over all individual vessel
+for n in vessels:
 
-# Plot method Draw a line in 
-# between given coordinates 
-gmap3.plot(latitude_list, longitude_list,
-           'cornflowerblue', edge_width=2.5)
+    # Fetching the data for the vessel in the current iteration of the dataframe
+    df_temp = df[df['Vessel_name'] == n]
 
-gmap3.draw("map13.html")
+    # Converting a pandas series to a list so that it can be given as an input to
+    #  the gmap plot
+    latitude_list = df_temp['Latitude'].to_list()
+    longitude_list = df_temp['Longitude'].to_list()
+
+    # scatter method of map object
+    # scatter points on the google map
+    gmap3.scatter(latitude_list, longitude_list, 'cornflowerblue',
+                  size=10000, marker=False)
+
+    # Plot method Draw a line in
+    # between given coordinates
+    gmap3.plot(latitude_list, longitude_list,
+               'cornflowerblue', edge_width=2.5)
+
+    # Looping over all the data for the vessel in the current iteration
+    for index, row in df_temp.iterrows():
+
+        # Adding a visual tool tip to the point plotted containing the vessel name
+        gmap3.marker(row['Latitude'], row['Longitude'], title=n)
+
+# Currently we use the free version of google maps, this will show a developer
+# watermark on the map. Inorder to remove the watermark, you need to purchase the
+# API credential from google cloud platform and add the API key to the code
+# snippet below
+# gmap3.apikey = 'Enter API' #Google cloud platform
+
+# Drawing the map to an HTML file, not that this file will be stored in the same
+# location as this code file. Opening the HTML file will open your map in the
+# browser
+gmap3.draw("geoplot.html")
