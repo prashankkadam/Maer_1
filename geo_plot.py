@@ -15,6 +15,7 @@ version : 1.0
 # Importing the required libraries:
 import gmplot
 import pandas as pd
+from math import sin, cos, sqrt, atan2, radians
 
 # Importing the data from excel sheet
 # This data contains the latitude, logitude and the vessel name of the vessel whose
@@ -50,12 +51,55 @@ for n in vessels:
     gmap3.plot(latitude_list, longitude_list,
                'cornflowerblue', edge_width=2.5)
 
+    # approximate radius of earth in km
+    R = 6373.0
+
+    # Initialization of the final distance variable
+    final_dist = 0
+
+    # Initialization of the lat and long temporary variables
+    lat_temp = 'X'
+    long_temp = 'X'
+
     # Looping over all the data for the vessel in the current iteration
     for index, row in df_temp.iterrows():
+
+        # If the loop is in the first iteration, we set the values of the temporary variables
+        # based on the lat and long values of the first iteration and continue the loop
+        if lat_temp == 'X' and long_temp == 'X':
+            lat_temp = row['Latitude']
+            long_temp = row['Longitude']
+            continue
+
+        # Initializing the lat and long variable which we will be using for calculation and
+        # converting them into radians
+        lat1 = radians(row['Latitude'])
+        lon1 = radians(row['Longitude'])
+        lat2 = radians(lat_temp)
+        lon2 = radians(long_temp)
+
+        # Calculating the difference between the lats and longs of the two points
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+
+        # Calculating the actual distance between the two positions i.e. in the previous
+        # and the current iteration of the loop
+        a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        distance = R * c
+
+        # Adding the distance calculated in the current iteration to the final distance
+        final_dist = final_dist + distance
+
+        # Setting the values of temporary lat and long for the next iteration
+        lat_temp = row['Latitude']
+        long_temp = row['Longitude']
 
         # Adding a visual tool tip to the point plotted containing the vessel name
         gmap3.marker(row['Latitude'], row['Longitude'], title=n)
 
+    print(n, '->', final_dist, 'km')
 # Currently we use the free version of google maps, this will show a developer
 # watermark on the map. Inorder to remove the watermark, you need to purchase the
 # API credential from google cloud platform and add the API key to the code
@@ -66,3 +110,4 @@ for n in vessels:
 # location as this code file. Opening the HTML file will open your map in the
 # browser
 gmap3.draw("geoplot.html")
+
