@@ -24,3 +24,5 @@ Plot multiple vessel voyage on google maps - (07/11/2019)
 Distance Calculation logic added to the geoplot - (12/11/2019)
 
 XML to SEMARK format converter - (21/11/2019)
+
+XML to SEMARK format converter (Project added) - (22/11/2019)
