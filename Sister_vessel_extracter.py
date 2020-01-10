@@ -89,4 +89,4 @@ for f in paths:
     
 # After all the data has been extracted into a single dataframe we export the 
 # dataframe to an excel sheet        
-df_final_data.to_excel('M:\Fuel Opt\VesselPerformance\Vessel Information\Vessel Data\Static Data\Prashank\Sister_vessel\\final.xls
+df_final_data.to_excel('M:\Fuel Opt\VesselPerformance\Vessel Information\Vessel Data\Static Data\Prashank\Sister_vessel\\final.xlsx')
